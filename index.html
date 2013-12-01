@@ -1,0 +1,39 @@
+<head>
+	<title>GIFDANCERRRRR</title>
+</head>
+
+<body>
+	{{renderPage}}
+</body>
+
+<template name="main">
+<h1>GIFDANCERRR</h1>
+<div class="main">
+{{> add}}
+{{> gifs}}
+</div>
+</template>
+
+<template name="add">
+	<h2>ADD A GIF</h2>
+	<input type="text" placeholder="Enter URL">
+	<button>ADD!</button>
+</template>
+
+<template name="tapper">
+<div class="tapper">
+	<div>BPM: {{bpm}}</div>
+	<button>TAP</button>
+</div>
+</template>
+
+<template name="gifs">
+<div class="gifs">
+	<h2>GIFS</h2>
+	{{#each gifs}}
+		<img src="{{url}}"/>
+	{{else}}
+		NO GIFS?? WHY GOD WHY
+	{{/each}}
+</div>
+</template>
