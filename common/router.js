@@ -13,8 +13,8 @@ if (Meteor.isClient) {
 
 if (Meteor.isServer) {
 	Meteor.Router.add({
-		'/images/:url': function(url) {
-			var gif = GIFS.findOne({ filename: url.replace(/\./g,"\.") });
+		'/images/:id.gif': function(id) {
+			var gif = GIFS.findOne(id);
 			if (!gif) {
 				return [ 404, "Image not found" ];
 			} else {
