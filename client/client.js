@@ -1,19 +1,4 @@
-Template.add.events({
-	"click button": function(ev, el) {
-		newGifUrl = el.find("input").value;
-		if (newGifUrl) {
-			GIFS.insert({ url: newGifUrl });
-		}
-	}
-})
-
-Template.tapper.helpers({
-	bpm: function () {
-		return Session.get("bpm") || 0;
-	}
-})
-
-var calculateBPM = function(lastTaps) {
+window.calculateAvgInterval = function(lastTaps) {
 	var msNow = new Date().getTime();
 	var timeLimit = msNow - 8000;
 	var recent = lastTaps.filter(function(tap) {
@@ -34,22 +19,25 @@ var calculateBPM = function(lastTaps) {
 			function(a, b) { return a + b }
 		) / deltas.length;
 
-	return (60000 / avgMsInterval).toFixed(2);
+	return avgMsInterval;
 };
 
-Template.tapper.events({
-	"click button": function() {
-		var lastTaps = Session.get("lastTaps") || [];
-		if (lastTaps.length >= 5) { lastTaps.shift(); }
-		lastTaps.push(new Date().getTime());
-		Session.set("lastTaps", lastTaps);
-		var bpm = calculateBPM(lastTaps);
-		Session.set("bpm", bpm);
-	}
-})
+window.GifPlayer = { intervalId: 0 };
 
-Template.gifs.helpers({
-	gifs: function() {
-		return GIFS.find();
-	}
-})
+GifPlayer.load = function(imgEl, loadedCallback) {
+	imgEl = imgEl || document.querySelector("img")
+	clearInterval(GifPlayer.intervalId);
+	delete window.supergif;
+	window.supergif = new window.SuperGif({ auto_play:0, gif: imgEl });
+	supergif.load(loadedCallback);
+}
+
+GifPlayer.playAtSpeedForBeats = function(msOfOneBeat, numBeats) {
+	var numFrames = supergif.get_length();
+	var interval = (msOfOneBeat * numBeats) / numFrames;
+	clearInterval(GifPlayer.intervalId);
+	supergif.move_to(0);
+	GifPlayer.intervalId = setInterval(function() {
+		supergif.move_relative(1);
+	}, interval)
+};

@@ -1,0 +1,60 @@
+<head>
+	<title>GIFDANCERRRRR</title>
+</head>
+
+<body>
+	{{renderPage}}
+</body>
+
+<template name="main">
+<h1>GIFDANCERRR</h1>
+<a href="/newgif">Add a new GIF</a>
+<div class="main">
+{{> tapper}}
+{{> gifs}}
+</div>
+</template>
+
+<template name="newgif">
+	<h1>Add a GIF!</h1>
+	{{#if uploadingImage}}
+		<form class="add">
+		<h2><s>Step 1: Upload a gif</s></h2>
+		<img src="data:image/gif;base64,{{uploadingImageData}}">
+		<h2>Step 2: How many beats does this gif span before looping?</h2>
+		<input type="text" class="beats" placeholder="1, or 2, or.."
+			autofocus>
+		<button>Add GIF!</button>
+		</form>
+	{{else}}
+		<form class="upload">
+		<h2>Step 1: Upload a gif</h2>
+		<input type="text" class="url"
+			{{#if downloading}}
+			disabled placeholder="Uploading image..."
+			{{else}}
+			placeholder="Paste URL"
+			{{/if}}
+			 autofocus>
+		<button {{#if downloading}}disabled{{/if}}>UPLOAD</button>
+		</form>
+	{{/if}}
+</template>
+
+<template name="tapper">
+<div class="tapper">
+	<div>average tap interval, in ms: {{interval}}</div>
+	<button>TAP</button>
+</div>
+</template>
+
+<template name="gifs">
+<div class="gifs">
+	<h2>GIFS</h2>
+	{{#each gifs}}
+		<img src="/images/{{filename}}"/>
+	{{else}}
+		NO GIFS?? WHY GOD WHY
+	{{/each}}
+</div>
+</template>
